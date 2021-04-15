@@ -18,16 +18,16 @@ class DbHelper extends SQLiteOpenHelper
     // class table
     public static final String CLASS_TABLE_NAME = "CLASS_TABLE";
     public static final String C_ID = "_CID";
-    public static final String CLASS_NAME_KEY = "CLASS_NAME";
+    public static final String CLASS_NAME_KEY = "className";
     public static final String SUBJECT_NAME_KEY = "SUBJECT_NAME";
 
 
     private static final String CREATE_CLASS_TABLE =
 
             "CREATE TABLE " +CLASS_TABLE_NAME+"("+
-                    C_ID+ "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"+
-                    CLASS_NAME_KEY+ "TEXT NOT NULL,"+
-                    SUBJECT_NAME_KEY+ "TEXT NOT NULL, "+
+                    C_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                    CLASS_NAME_KEY+ " VARCHAR(200) NOT NULL,"+
+                    SUBJECT_NAME_KEY+ " VARCHAR(200) NOT NULL, "+
                     "UNIQUE ("+ CLASS_NAME_KEY + "," + SUBJECT_NAME_KEY+")"+
                     ");";
 
@@ -38,17 +38,17 @@ class DbHelper extends SQLiteOpenHelper
     public static final String STUDENT_TABLE_NAME = "STUDENT_TABLE";
     public static final String S_ID= "_SID";
     public static final String STUDENT_NAME_KEY= "STUDENT_NAME";
-    public static final String STUDENT_ROLL_KEY= "ROLL";
+    public static final String STUDENT_ROLL_KEY= "Roll";
 
 
     private static final String CREATE_STUDENT_TABLE=
             "CREATE TABLE " + STUDENT_TABLE_NAME+ "("+
 
-                    S_ID+ "INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"+
-                    C_ID + "INTEGER NOT NULL ,"+
-                    STUDENT_NAME_KEY + "TEXT NOT NULL,"+
-                    STUDENT_ROLL_KEY + "INTEGER,"+
-                    "FOREIGN KEY ("+C_ID +")REFERENCES "+ CLASS_TABLE_NAME +"("+C_ID+")"+
+                    S_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                    C_ID + " INTEGER NOT NULL ,"+
+                    STUDENT_NAME_KEY + " VARCHAR(200) NOT NULL,"+
+                    STUDENT_ROLL_KEY + " INTEGER,"+
+                    " FOREIGN KEY ("+C_ID +") REFERENCES "+ CLASS_TABLE_NAME +"("+C_ID+")"+
                     ");";
     private static final String DROP_STUDENT_TABLE = "DROP TABLE IF EXISTS "+ STUDENT_TABLE_NAME;
     private static final String SELECT_STUDENT_TABLE = "SELECT * FROM"+ STUDENT_TABLE_NAME;
@@ -68,9 +68,9 @@ class DbHelper extends SQLiteOpenHelper
             C_ID + " INTEGER NOT NULL , "+
             DATE_KEY + " DATE NOT NULL, "+
             STATUS_KEY + " TEXT NOT NULL, "+
-            " UNIQUE("+S_ID + "," + DATE_KEY+"), "+
-            "FOREIGN KEY ("+S_ID +")REFERENCES "+ STUDENT_TABLE_NAME +"("+S_ID+"),"+
-            "FOREIGN KEY ("+C_ID +")REFERENCES "+ CLASS_TABLE_NAME +"("+C_ID+")"+
+            " UNIQUE("+S_ID + ","+ DATE_KEY+"), "+
+            " FOREIGN KEY ("+S_ID +") REFERENCES "+ STUDENT_TABLE_NAME +"("+S_ID+"),"+
+            " FOREIGN KEY ("+C_ID +") REFERENCES "+ CLASS_TABLE_NAME +"("+C_ID+")"+
             ");";
     private static final String DROP_STATUS_TABLE = "DROP TABLE IF EXISTS "+ STATUS_TABLE_NAME;
     private static final String SELECT_STATUS_TABLE = "SELECT * FROM"+ STATUS_TABLE_NAME;
@@ -144,7 +144,8 @@ class DbHelper extends SQLiteOpenHelper
     }
     Cursor getStudentTable(long cid){
         SQLiteDatabase database = this.getReadableDatabase();
-        return database.query(STUDENT_TABLE_NAME,null,C_ID + "+?", new String[]{String.valueOf(cid)},null,null,STUDENT_ROLL_KEY);
+        return database.query(STUDENT_TABLE_NAME,null,C_ID + "+?", new String[]{String.valueOf(cid)},
+                null,null,STUDENT_ROLL_KEY);
     }
     int deleteStudent(long sid){
         SQLiteDatabase database = this.getReadableDatabase();
